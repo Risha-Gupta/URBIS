@@ -1,0 +1,3 @@
+dataset_id,name,source,crs,notes
+building3d_tallinn,Building3D Tallinn,Building3D,EPSG:3301,"test split (3,207 buildings); roof-point clouds, 2,048 points each"
+city3d_ahn3,City3D AHN3 sample,City3D,,robustness only (out-of-distribution); no coordinates; reference is algorithm-generated

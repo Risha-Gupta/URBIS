@@ -1,0 +1,164 @@
+{
+  "created_at": "2026-11-09T10:34:50+00:00",
+  "dataset_id": "building3d_tallinn",
+  "pipeline_version": "phase2_latest+phase3_alt",
+  "crs": "EPSG:3301",
+  "current_policy": "phase6_rebased",
+  "thresholds": {
+    "t_low": 0.7164705015683829,
+    "t_acc": 0.7393377861810939,
+    "label_thr": 0.3265306122448979
+  },
+  "tables": {
+    "datasets": {
+      "rows": 2,
+      "columns": [
+        "dataset_id",
+        "name",
+        "source",
+        "crs",
+        "notes"
+      ],
+      "sha256": "d408e0052d2ea0e979376439134e865a13e4384a323bfcc10db628228db66963"
+    },
+    "buildings": {
+      "rows": 3207,
+      "columns": [
+        "building_id",
+        "dataset_id",
+        "split",
+        "half",
+        "coverage_class",
+        "num_points",
+        "footprint_wkt",
+        "footprint_area_m2",
+        "z_min",
+        "z_max",
+        "footprint_srid",
+        "footprint_source"
+      ],
+      "sha256": "e9a3712bb29fc83b03d24e7e77b7963e80ae6f285e2aab1910e5898867aeb795"
+    },
+    "reconstructions": {
+      "rows": 3207,
+      "columns": [
+        "building_id",
+        "n_pred_corners",
+        "n_pred_edges",
+        "status",
+        "version",
+        "model_path",
+        "pipeline_version",
+        "created_at"
+      ],
+      "sha256": "8007b76104d39befe45a015ab7f0cfc190d95731d2f8b1fbc2f060e5ea9d4010"
+    },
+    "uncertainty": {
+      "rows": 3207,
+      "columns": [
+        "building_id",
+        "mean_corner_spread_m",
+        "max_corner_spread_m",
+        "corner_confidence",
+        "mean_edge_entropy",
+        "edge_confidence",
+        "model_confidence",
+        "osm_available",
+        "osm_centroid_distance_m",
+        "osm_iou",
+        "osm_area_error",
+        "microsoft_available",
+        "microsoft_centroid_distance_m",
+        "microsoft_iou",
+        "microsoft_area_error",
+        "external_confidence",
+        "combined_confidence",
+        "confidence_class"
+      ],
+      "sha256": "18d541f0b091407a7bbb9b759ea301a426e785ca54c7513d8454a4634c8f32a2"
+    },
+    "decisions": {
+      "rows": 6414,
+      "columns": [
+        "building_id",
+        "policy_version",
+        "action",
+        "confidence_used",
+        "t_low",
+        "t_acc",
+        "is_current"
+      ],
+      "sha256": "fd87525d42fc2504fcef4710ec4971d4d5c7b53fcfbbf4498b490ac0e566fd8a"
+    },
+    "evaluation": {
+      "rows": 3207,
+      "columns": [
+        "building_id",
+        "half",
+        "min_f1_1m",
+        "is_bad",
+        "min_f1_phase4_old",
+        "is_bad_phase4_old"
+      ],
+      "sha256": "65c072f7357657d25252d8ff49ef4513741153e3c51b96f71420058d14d22c90"
+    },
+    "solar_buildings": {
+      "rows": 3207,
+      "columns": [
+        "building_id",
+        "n_planes",
+        "plane_point_coverage",
+        "total_roof_area_m2",
+        "usable_roof_area_m2",
+        "annual_kwh",
+        "annual_kwh_unshaded",
+        "shading_loss_frac",
+        "kwh_per_m2_roof",
+        "dominant_tilt_deg",
+        "dominant_azimuth_deg",
+        "dominant_is_flat",
+        "projected_roof_area_m2",
+        "gt_corner_hull_area_m2",
+        "projected_vs_gt_hull_ratio",
+        "area_outlier",
+        "solar_reliability",
+        "solar_rank",
+        "p_bad",
+        "p_bad_out_of_sample",
+        "review_priority",
+        "review_rank",
+        "solar_review",
+        "policy_version"
+      ],
+      "sha256": "aef9276d275710a5864f03264a20042fcebe62c4aeaa0e2e40e5684ab615cb9f"
+    },
+    "roof_planes": {
+      "rows": 9116,
+      "columns": [
+        "building_id",
+        "plane_id",
+        "tilt_deg",
+        "azimuth_deg",
+        "area_m2",
+        "n_points",
+        "rms_m",
+        "cx",
+        "cy",
+        "mean_z",
+        "ground_like",
+        "is_flat",
+        "viable",
+        "panel_tilt_deg",
+        "panel_azimuth_deg",
+        "usable_area_m2",
+        "irradiation_kwh_m2",
+        "annual_kwh",
+        "annual_kwh_unshaded",
+        "shading_loss_frac",
+        "horizon_max_deg",
+        "sky_view_factor"
+      ],
+      "sha256": "b6df58b2b1490ea5716d3402043223140644b0d92a4e15cf02cb9a4660959709"
+    }
+  }
+}
