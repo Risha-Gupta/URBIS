@@ -1,0 +1,51 @@
+# URBIS Phase 7: PostGIS + ETL loader + FastAPI backend
+#   docker compose up -d db                       # PostGIS (schema applied on first start)
+#   docker compose --profile etl run --rm etl     # load ./seed (safe to re-run)
+#   docker compose up -d --build backend          # API on http://localhost:8000/docs
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: urbis
+      POSTGRES_USER: urbis
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-urbis}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urbis -d urbis"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  etl:
+    build: ./etl
+    profiles: ["etl"]
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://urbis:${POSTGRES_PASSWORD:-urbis}@db:5432/urbis
+    volumes:
+      - ./seed:/seed:ro
+    command: ["--seed", "/seed"]
+
+  backend:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://urbis:${POSTGRES_PASSWORD:-urbis}@db:5432/urbis
+      MODEL_DIR: /models
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/models:ro
+    restart: unless-stopped
+
+volumes:
+  pgdata:
