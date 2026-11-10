@@ -5,6 +5,7 @@
 services:
   db:
     image: postgis/postgis:16-3.4
+    platform: linux/amd64
     environment:
       POSTGRES_DB: urbis
       POSTGRES_USER: urbis
