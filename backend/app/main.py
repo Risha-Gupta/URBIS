@@ -11,7 +11,7 @@ from fastapi.responses import JSONResponse
 
 from . import db
 from .config import settings
-from .routers import buildings, health, rankings, stats
+from .routers import buildings, health, rankings, stats, glb_assets
 from .jobs import jobs_router
 from .jobs.db import SessionLocal
 from .jobs.models import Job, JobEvent, ACTIVE
@@ -30,6 +30,8 @@ Searchable building database for **URBIS** (Tallinn, Building3D).
 * Decisions use the current policy `phase6_rebased`; the old `phase4_old` rows are kept but never current.
 * Ground-truth evaluation scores are never returned per building.
 * Reconstruction jobs (`/jobs`) run in the background, stream progress over SSE, and keep every attempt as a result version.
+* Exported GLBs are served from `MODEL_DIR/glb` and indexed by `MODEL_DIR/glb_manifest.json`.
+* GLB manifest anchors use EPSG:3301; mesh vertices are local projected offsets.
 """
 
 
@@ -90,5 +92,5 @@ async def db_error_handler(request: Request, exc: Exception):
     return JSONResponse({"detail": "Internal database error"}, status_code=500)
 
 
-for r in (health.router, buildings.router, rankings.router, stats.router, jobs_router):
+for r in (health.router, buildings.router, rankings.router, stats.router, glb_assets.router, jobs_router):
     app.include_router(r)
