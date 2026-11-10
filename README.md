@@ -1,4 +1,4 @@
-# URBIS – Urban Intelligence and Self-Correction
+# URBIS â€“ Urban Intelligence and Self-Correction
 
 URBIS takes LiDAR scans of buildings in Tallinn and turns them into 3D building models. It also tells you how much to trust each model, and sends the doubtful ones to a person to check. On top of that, it estimates how much solar energy each roof could produce.
 
