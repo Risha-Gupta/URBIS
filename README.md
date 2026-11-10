@@ -169,3 +169,20 @@ Python, PyTorch (PointNet++-style corner network and graph edge network), NumPy/
 ## Data and credits
 
 Point clouds and reference geometry: [Building3D](https://building3d.ucalgary.ca/) (Tallinn). Footprint cross-checks: OpenStreetMap contributors and Microsoft Global ML Building Footprints. Solar irradiation: PVGIS (European Commission JRC).
+
+### 4. Rebuilding the 3D models
+
+`tools/build_lod_glb.py` builds a clean 3D model per building: walls from the building outline (OSM where available, otherwise the hull of the LiDAR roof points) and a flat-faceted roof from the fitted roof planes. It writes GLB files plus a patched manifest, and `--install` copies both into the backend.
+
+```bash
+python tools/build_lod_glb.py \
+  --npz-dir subset \
+  --manifest backend/models/glb_manifest.json \
+  --planes phase5_roof_planes.csv \
+  --ground-from-manifest \
+  --ids 10057 10180 4409 \
+  --out lod_glb --install backend/models
+docker compose -f backend/docker-compose.yml restart backend
+```
+
+Inputs: one `<id>.npz` per building (`points`, `scale`, `center`, exported from the Phase 2 cache) and `phase5_roof_planes.csv` from the Phase 5 solar notebook. Neither is stored in git.
