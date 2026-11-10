@@ -17,3 +17,11 @@ __pycache__/
 Thumbs.db
 
 *.log
+
+*.pyc
+.pytest_cache/
+lod_glb/
+lod_glb2/
+subset/
+*.zip
+backend/models/glb/
