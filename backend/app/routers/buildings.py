@@ -187,12 +187,29 @@ def building_model(building_id: str):
                           WHERE r.building_id = %(id)s ORDER BY r.version DESC LIMIT 1""", {"id": building_id})
     if row is None:
         raise HTTPException(404, f"Building {building_id!r} not found")
-    if not row["model_path"]:
-        raise HTTPException(404, "No 3D model has been generated for this building yet.")
     root = Path(settings.model_dir).resolve()
-    path = (root / row["model_path"]).resolve()
-    if root not in path.parents or not path.is_file():
-        log.warning("model file missing or outside MODEL_DIR: %s", row["model_path"])
-        raise HTTPException(404, "Model file is not available on this server.")
+    if row["model_path"]:
+        path = (root / row["model_path"]).resolve()
+        if root not in path.parents or not path.is_file():
+            log.warning("model file missing or outside MODEL_DIR: %s", row["model_path"])
+            raise HTTPException(404, "Model file is not available on this server.")
+    else:
+        # Phase 8 export fallback: use the validated building-ID GLB collection.
+        manifest_path = root / "glb_manifest.json"
+        glb_path = root / "glb" / f"{building_id}.glb"
+        if not manifest_path.is_file() or not glb_path.is_file():
+            raise HTTPException(404, "No 3D model is available for this building.")
+        try:
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            registered = any(str(item.get("building_id")) == building_id
+                             and item.get("glb_filename") == glb_path.name
+                             for item in manifest.get("buildings", []))
+        except (OSError, json.JSONDecodeError):
+            registered = False
+        if not registered:
+            raise HTTPException(404, "No registered GLB is available for this building.")
+        path = glb_path.resolve()
+        if root not in path.parents:
+            raise HTTPException(404, "Model file is not available on this server.")
     return FileResponse(path, media_type=MEDIA.get(path.suffix.lower(), "application/octet-stream"),
                         filename=path.name)
